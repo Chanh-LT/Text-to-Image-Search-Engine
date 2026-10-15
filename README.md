@@ -1,13 +1,12 @@
-# 🔍 OmniLens - Multi-Engine Reverse Image Search Tool
+# OmniLens - Multi-Engine Reverse Image Search Tool
 
-Ứng dụng Web tìm kiếm ảnh ngược (Reverse Image Search) đa công cụ hiện đại, kết hợp đồng thời sức mạnh của **Google Lens**, **Bing Visual Search** và **Yandex Images** hoàn toàn **100% Miễn phí, không cần bất kỳ API Key nào**.
+Ứng dụng Web tìm kiếm ảnh ngược (Reverse Image Search) bằng đa công cụ, kết hợp đồng thời **Google Lens**, **Bing Visual Search** và **Yandex Images**
 
 ---
 
-## ✨ Tính Năng Nổi Bật
+## Tính Năng
 
-- **Đa công cụ thông minh**: Tìm kiếm đồng thời trên **Google Lens**, **Bing Visual Search** và **Yandex**, bóc tách visual matches và web results.
-- **100% Miễn phí, Không API Key**: Tự động hóa gửi yêu cầu HTTP và phân tích dữ liệu ở phía Backend.
+- **Đa công cụ**: Tìm kiếm đồng thời trên **Google Lens**, **Bing Visual Search** và **Yandex**, bóc tách visual matches và web results.
 - **Tiền xử lý ảnh linh hoạt (Crop Studio)**:
   - Hỗ trợ khoanh vùng chọn đối tượng trên ảnh (giống Google Lens) trước khi tìm kiếm.
   - Hỗ trợ tỷ lệ khung hình: Tự do, 1:1, 4:3, 16:9 hoặc toàn bộ ảnh.
@@ -17,10 +16,6 @@
   - Tải file từ máy tính (JPG, PNG, WEBP, GIF).
   - Tìm kiếm qua đường dẫn URL hình ảnh trực tiếp.
   - Bộ ảnh mẫu thử nghiệm nhanh có sẵn trong 1 click.
-- **Giao diện đỉnh cao (Dark Futuristic Glassmorphism)**:
-  - Thiết kế cao cấp với hiệu ứng kính mờ (blur), viền neon, micro-animations mượt mà.
-  - Bộ lọc kết quả theo Tab từng công cụ (Tất cả, Google, Bing, Yandex).
-  - Thẻ kết quả chi tiết kèm Favicon domain, tiêu đề, % độ khớp, và nút xem ảnh gốc.
 - **Lightbox So Sánh Đối Chiếu**: Xem ảnh tìm thấy cạnh ảnh đầu vào của bạn để đối chiếu sự tương đồng.
 - **Mở trực tiếp trên web chính thức**: Tạo sẵn liên kết trực tiếp mở kết quả trên giao diện chính thức của Google Lens, Bing Visual Search, Yandex và TinEye.
 - **Tiện ích bổ trợ**:
@@ -29,7 +24,7 @@
 
 ---
 
-## 🚀 Hướng Dẫn Cài Đặt & Sử Dụng
+## Hướng Dẫn Cài Đặt & Sử Dụng
 
 ### Cách 1: Khởi động nhanh bằng file Batch (Khuyên dùng trên Windows)
 Chỉ cần nhấp đúp vào file:
@@ -58,7 +53,7 @@ http://127.0.0.1:8000
 
 ---
 
-## 🏗️ Cấu Trúc Dự Án
+## Cấu Trúc Dự Án
 
 ```
 d:/Image_Search_Tool/
