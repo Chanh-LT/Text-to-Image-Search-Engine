@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniLens - Tìm Kiếm Ảnh Ngược Đa Nguồn (Google Lens, Bing, Yandex)</title>
+  <meta name="description" content="Công cụ tìm kiếm ảnh ngược mạnh mẽ trên Internet qua Google Lens, Bing Visual Search và Yandex. Hoàn toàn miễn phí, hỗ trợ khoanh vùng cắt đối tượng thông minh.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <a href="/" class="brand-wrapper">
+      <div class="brand-logo">🔍</div>
+      <div>
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span class="brand-title">OmniLens</span>
+          <span class="brand-badge">PRO SEARCH</span>
+        </div>
+      </div>
+    </a>
+
+    <div class="header-actions">
+      <button class="btn btn-glass" id="btnOpenHistory" title="Lịch sử tìm kiếm">
+        <span>⏱️</span> Lịch sử
+      </button>
+      <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="btn btn-glass btn-icon" title="Thông tin dự án">
+        <span>⭐</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="app-main">
+    
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <h1 class="hero-title">
+        Tìm Kiếm Mọi Thứ Bằng <span class="gradient-text">Hình Ảnh</span>
+      </h1>
+      <p class="hero-subtitle">
+        Bóc tách và truy vết nguồn gốc hình ảnh trên toàn bộ Internet đồng thời qua Google Lens, Bing Visual Search và Yandex mà không cần bất kỳ API Key nào.
+      </p>
+
+      <div class="engine-status-bar">
+        <div class="engine-pill">
+          <span class="engine-dot google"></span> Google Lens
+        </div>
+        <div class="engine-pill">
+          <span class="engine-dot bing"></span> Bing Visual
+        </div>
+        <div class="engine-pill">
+          <span class="engine-dot yandex"></span> Yandex Images
+        </div>
+      </div>
+    </section>
+
+    <!-- Upload & Dropzone Card -->
+    <section class="upload-card glass-panel" id="uploadSection">
+      <div class="dropzone" id="dropzone">
+        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+        <div class="dropzone-icon">📷</div>
+        <h3 class="dropzone-title">Kéo & Thả ảnh vào đây hoặc bấm để chọn file</h3>
+        <p class="dropzone-hint">
+          Hỗ trợ định dạng JPG, PNG, WEBP, GIF • Hoặc chỉ cần nhấn <span class="kbd-badge">Ctrl + V</span> ở bất kỳ đâu để dán ảnh
+        </p>
+        <button class="btn btn-primary" type="button" onclick="document.getElementById('fileInput').click()">
+          <span>📁</span> Chọn ảnh từ máy tính
+        </button>
+      </div>
+
+      <div class="input-alternatives">
+        <!-- URL Input -->
+        <div class="url-input-group">
+          <input type="url" id="imageUrlInput" class="input-field" placeholder="Dán liên kết (URL) hình ảnh trực tiếp vào đây..." autocomplete="off">
+          <button class="btn btn-glass" id="btnFetchUrl">
+            <span>🌐</span> Tìm bằng URL
+          </button>
+        </div>
+
+        <!-- Sample Images -->
+        <div class="samples-row">
+          <span>Ảnh thử nghiệm nhanh:</span>
+          <button type="button" class="sample-chip" data-url="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=800">
+            🗼 Tháp Eiffel Paris
+          </button>
+          <button type="button" class="sample-chip" data-url="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=800">
+            🐱 Mèo lông vàng
+          </button>
+          <button type="button" class="sample-chip" data-url="https://images.unsplash.com/photo-1544816155-12df9643f363?w=800">
+            🏎️ Siêu xe thể thao
+          </button>
+          <button type="button" class="sample-chip" data-url="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=800">
+            🎨 Tác phẩm hội họa
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Crop Studio Card (Google Lens Object Selector) -->
+    <section class="crop-studio-card glass-panel" id="cropStudioCard">
+      <div class="crop-studio-header">
+        <div class="crop-studio-title">
+          <span>✂️</span>
+          <span>Khoanh Vùng Đối Tượng (Object Selection)</span>
+        </div>
+        <div class="image-meta-bar" id="imageMetaText">
+          1920 × 1080 px • 250 KB
+        </div>
+      </div>
+
+      <div class="crop-canvas-wrapper">
+        <canvas id="cropCanvas"></canvas>
+      </div>
+
+      <div class="crop-controls-bar">
+        <div class="crop-aspect-buttons">
+          <button type="button" class="crop-pill active" data-ratio="free">Tự do</button>
+          <button type="button" class="crop-pill" data-ratio="1:1">1:1 Vuông</button>
+          <button type="button" class="crop-pill" data-ratio="4:3">4:3 Chuẩn</button>
+          <button type="button" class="crop-pill" data-ratio="16:9">16:9 Rộng</button>
+          <button type="button" class="crop-pill" id="btnCropReset">Toàn bộ ảnh</button>
+        </div>
+
+        <div class="crop-actions">
+          <button type="button" class="btn btn-glass" id="btnCancelCrop">Hủy</button>
+          <button type="button" class="btn btn-glass" id="btnSearchFull">
+            <span>🖼️</span> Tìm nguyên ảnh
+          </button>
+          <button type="button" class="btn btn-primary" id="btnSearchCrop">
+            <span>✨</span> Tìm vùng đã chọn
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Search Loader & Status Tracker -->
+    <section class="search-loader glass-panel" id="searchLoader">
+      <div class="loader-radar"></div>
+      <h3 class="loader-text">Đang quét và đối chiếu trên Internet...</h3>
+      <p class="loader-subtext">Hệ thống đang truy vấn song song Google Lens, Bing Visual Search và Yandex</p>
+      
+      <div class="engine-check-list">
+        <div class="check-item"><span class="check-spinner"></span> Google Lens</div>
+        <div class="check-item"><span class="check-spinner"></span> Bing Visual</div>
+        <div class="check-item"><span class="check-spinner"></span> Yandex Images</div>
+      </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="results-section" id="resultsSection">
+      <div class="results-header">
+        <div class="tabs-group">
+          <button class="tab-btn active" data-tab="all">
+            Tất cả <span class="tab-badge" id="badgeAll">0</span>
+          </button>
+          <button class="tab-btn" data-tab="google">
+            Google Lens <span class="tab-badge" id="badgeGoogle">0</span>
+          </button>
+          <button class="tab-btn" data-tab="bing">
+            Bing Visual <span class="tab-badge" id="badgeBing">0</span>
+          </button>
+          <button class="tab-btn" data-tab="yandex">
+            Yandex <span class="tab-badge" id="badgeYandex">0</span>
+          </button>
+        </div>
+
+        <div class="direct-engine-links">
+          <span style="font-size:0.82rem; color:var(--text-dim); margin-right:0.2rem;">Mở trực tiếp:</span>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="engine-jump-btn google" id="linkGoogle">
+            Google Lens ↗
+          </a>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="engine-jump-btn bing" id="linkBing">
+            Bing Visual ↗
+          </a>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="engine-jump-btn yandex" id="linkYandex">
+            Yandex ↗
+          </a>
+          <a href="#" target="_blank" rel="noopener noreferrer" class="engine-jump-btn" id="linkTinEye" style="color:#00c0f0;">
+            TinEye ↗
+          </a>
+          <button class="btn btn-glass" id="btnExportJson" style="padding:0.45rem 0.8rem; font-size:0.8rem;" title="Xuất kết quả JSON">
+            Xuất JSON
+          </button>
+          <button class="btn btn-glass" id="btnCopyLinks" style="padding:0.45rem 0.8rem; font-size:0.8rem;" title="Sao chép toàn bộ liên kết">
+            Copy Links
+          </button>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 1.2rem; display:flex; justify-content:space-between; align-items:center;">
+        <span style="font-size: 0.95rem; color: var(--text-muted);" id="resultsCount">0 kết quả</span>
+      </div>
+
+      <!-- Results Grid -->
+      <div class="results-grid" id="resultsGrid">
+        <!-- Result Cards Rendered Here Dynamically -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Side-by-Side Comparison Modal (Lightbox) -->
+  <div class="modal-overlay" id="compareModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">🔍 So Sánh Đối Chiếu Ảnh</h3>
+        <button class="btn btn-glass btn-icon" id="btnCloseModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="compare-box">
+          <div class="compare-label">Ảnh Đầu Vào Của Bạn</div>
+          <div class="compare-img-wrap">
+            <img src="" id="compareQueryImg" alt="Query Image">
+          </div>
+        </div>
+        <div class="compare-box">
+          <div class="compare-label">Ảnh Tìm Thấy Trên Mạng</div>
+          <div class="compare-img-wrap">
+            <img src="" id="compareResultImg" alt="Found Image">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center;">
+        <span id="compareResultTitle" style="font-size:0.9rem; color:var(--text-muted); max-width:400px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"></span>
+        <div style="display:flex; gap:0.6rem;">
+          <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn-glass" id="compareSourceBtn">
+            <span>↗</span> Mở trang web nguồn
+          </a>
+          <a href="#" target="_blank" download="match.jpg" class="btn btn-primary" id="compareDownloadBtn">
+            <span>↓</span> Tải ảnh về
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- History Drawer -->
+  <aside class="history-drawer" id="historyDrawer">
+    <div class="drawer-header">
+      <h3 class="drawer-title">⏱️ Lịch Sử Tìm Kiếm</h3>
+      <button class="btn btn-glass btn-icon" id="btnCloseHistory">✕</button>
+    </div>
+    <div class="drawer-list" id="historyList">
+      <!-- Recent searches rendered here -->
+    </div>
+    <div style="padding:1rem; border-top:1px solid var(--border-glass);">
+      <button class="btn btn-glass" id="btnClearHistory" style="width:100%;">
+        🗑️ Xóa toàn bộ lịch sử
+      </button>
+    </div>
+  </aside>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Scripts -->
+  <script src="/static/js/cropper.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
